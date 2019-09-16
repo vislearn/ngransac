@@ -53,7 +53,7 @@ class SparseDataset(Dataset):
 			ratios = ratios[:,ratio_filter,:]
 		
 		if self.overwrite_side_info:
-			ratios = np.zeros(ratios.shape)
+			ratios = np.zeros(ratios.shape, dtype=np.float32)
 
 		if self.fmat:
 			# for fundamental matrices, normalize image coordinates using the image size (network should be independent to resolution)

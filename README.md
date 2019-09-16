@@ -157,7 +157,7 @@ Both training scripts store a log `.txt` file with the training iteration number
 Execute both training scripts with the `-h` parameter to see all command line options, and standard values. The most important parameters are:
 
 `--datasets` -- a list of datasets to be used for training, separated by commata; the dataset names should correspond to folders in `traindata/`  
-`-orb`, `-rs` -- to use ORB or RootSIFT correspondences, default is SIFT; note that these options merely control which folder in `traindata/` is accessed; you have to pre-compute all respective correspondences (see [section above]((#data-structure)))  
+`-orb`, `-rs` -- to use ORB or RootSIFT correspondences, default is SIFT; note that these options merely control which folder in `traindata/` is accessed; you have to pre-compute all respective correspondences (see [section above](#data-structure))  
 `--model` -- model file name to load and continue training, e.g. to load a model from the initialization stage for end-to-end training; if empty, the script will create a new model  
 `--loss` -- selecting the loss to use for end-to-end training. We implemented `pose`: the angular error of the estimated pose; `f1`: the overlap of inliers of the estimated model and the ground truth model (only for fundamental matrices); `epi`: the epipolar error of estimated inlier to the ground truth model (only for fundamental matrices); `inliers`: the percentage of inlier of the estimated model, this is an self-supervied loss  
 `-fmat` -- if provided, NG-RANSAC is trained to estimate fundamental matrices using the 7-point algoritm rather than essential matrices using the 5-point algorithm

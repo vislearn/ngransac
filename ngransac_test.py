@@ -72,7 +72,7 @@ if opt.batchmode:
 	datasets = util.test_datasets
 	print("\n=== BATCH MODE: Doing evaluation for", len(datasets), "datasets. =================")
 else:
-	datasets = opt.dataset
+	datasets = [opt.dataset]
 
 # loop over datasets, perform a separate evaluation per dataset
 for dataset in datasets:

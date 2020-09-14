@@ -107,7 +107,7 @@ The core of the code are the scripts `ngransac_train_init.py` and `ngransac_trai
 We provide pre-computed correspondences for the datasets used in our paper which can be used to reproduce our results, for reference of how to prepare data for NG-RANSAC, or as basis to train your own robust estimator.
 
 ```bash
-wget -O traindata.tar.gz https://cloudstore.zih.tu-dresden.de/index.php/s/Gj28LoQjkf9qO5c/download
+wget -O traindata.tar.gz https://heidata.uni-heidelberg.de/api/access/datafile/:persistentId?persistentId=doi:10.11588/data/PCGYET/QZTF7P
 tar -xzvf traindata.tar.gz
 rm traindata.tar.gz
 ```

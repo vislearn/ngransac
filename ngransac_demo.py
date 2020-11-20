@@ -181,6 +181,8 @@ if opt.nosideinfo:
 	ratios = np.zeros(ratios.shape)
 
 # create data tensor of feature coordinates and matching ratios
+pts1 = pts1.transpose(1, 0, 2)
+pts2 = pts2.transpose(1, 0, 2)
 correspondences = np.concatenate((pts1, pts2, ratios), axis=2)
 correspondences = np.transpose(correspondences)
 correspondences = torch.from_numpy(correspondences).float()

@@ -1,8 +1,8 @@
 #include <torch/torch.h>
 #include <opencv2/opencv.hpp>
-
+#if defined(_OPENMP)
 #include <omp.h>
-
+#endif
 #include <iostream>
 
 #include "thread_rand.h"
@@ -76,8 +76,12 @@ double find_essential_mat(
 	#pragma omp parallel for
 	for(int h = 0; h < hypCount; h++)
 	{
+#if defined(_OPENMP)
 		unsigned threadID = omp_get_thread_num();
+#else
 
+		unsigned threadID = 0;
+#endif
 		//sample a minimal set
 		std::vector<cv::Point2d> minSet1(cMin); // coordinates of image 1
 		std::vector<cv::Point2d> minSet2(cMin); // coordinates of image 2
@@ -316,7 +320,12 @@ double find_fundamental_mat(
 	#pragma omp parallel for
 	for(int h = 0; h < hypCount; h++)
 	{
+#if defined(_OPENMP)
 		unsigned threadID = omp_get_thread_num();
+#else
+
+		unsigned threadID = 0;
+#endif
 
 		//sample a minimal set
 		std::vector<cv::Point2d> minSet1(cMin);

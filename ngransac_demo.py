@@ -59,9 +59,9 @@ else:
 	else:
 		print("Using SIFT.\n")
 	if opt.nfeatures > 0:
-		detector = cv2.xfeatures2d.SIFT_create(nfeatures=opt.nfeatures, contrastThreshold=1e-5)
+		detector = cv2.SIFT_create(nfeatures=opt.nfeatures, contrastThreshold=1e-5)
 	else:
-		detector = cv2.xfeatures2d.SIFT_create()
+		detector = cv2.SIFT_create()
 
 # loading neural guidence network
 model_file = opt.model
@@ -72,8 +72,9 @@ if len(model_file) == 0:
 	print(model_file)
 
 model = CNNet(opt.resblocks)
-model.load_state_dict(torch.load(model_file))
-model = model.cuda()
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+model.load_state_dict(torch.load(model_file,map_location=torch.device('cpu')))
+model = model.to(device)
 model.eval()
 print("Successfully loaded model.")
 
@@ -140,7 +141,7 @@ pts1 = np.array([pts1])
 pts2 = np.array([pts2])
 
 ratios = np.array([ratios])
-ratios = np.expand_dims(ratios, 2)
+ratios = np.expand_dims(ratios, 2).reshape( -1, 1,  1)
 
 # ------------------------------------------------
 # fit fundamental or essential matrix using OPENCV
@@ -181,12 +182,12 @@ if opt.nosideinfo:
 	ratios = np.zeros(ratios.shape)
 
 # create data tensor of feature coordinates and matching ratios
+print (pts1.shape, pts2.shape, ratios.shape)
 correspondences = np.concatenate((pts1, pts2, ratios), axis=2)
-correspondences = np.transpose(correspondences)
 correspondences = torch.from_numpy(correspondences).float()
-
+correspondences = correspondences.permute(2, 0, 1).float()
 # predict neural guidance, i.e. RANSAC sampling probabilities
-log_probs = model(correspondences.unsqueeze(0).cuda())[0] #zero-indexing creates and removes a dummy batch dimension
+log_probs = model(correspondences[None].to(device))[0] #zero-indexing creates and removes a dummy batch dimension
 probs = torch.exp(log_probs).cpu()
 
 out_model = torch.zeros((3, 3)).float() # estimated model
